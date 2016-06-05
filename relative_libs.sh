@@ -3,30 +3,31 @@
 
 set -e
 
-if [ ! `basename $PWD` -eq bin ]; then
+if [ `basename $PWD` != "bin" ]; then
     cd bin
 fi
 
 mkdir -p ../lib     # Move .dylib(s) to ../lib
-mv *.dylib ../lib/  # This is where they go on OS X
 
 ### We have 3 problem dylibs here, libapt-pkg, libapt-inst and libapt-private. We need to use install_name_tool to get the
 ### executable to load them relative to the executable's own path.
 
-PRIVATE_MAJ=0.0
-PRIVATE_MIN=0
-INST_MAJ=1.5
-INST_MIN=0
-PKG_MAJ=4.12
-PKG_MIN=0
+PRIVATE_MAJ="0.0"
+PRIVATE_MIN="0"
+INST_MAJ="1.5"
+INST_MIN="0"
+PKG_MAJ="4.12"
+PKG_MIN="0"
 
 PRIVATE=$PRIVATE_MAJ.$PRIVATE_MIN
 INST=$INST_MAJ.$INST_MIN
 PKG=$PKG_MAJ.$PKG_MIN
 
-mv ../lib/libapt-private.$PRIVATE.dylib ../lib/libapt-private-$PRIVATE.dylib # This breaks symlinks but ah well.
-mv ../lib/libapt-inst.$INST.dylib ../lib/libapt-inst-$INST.dylib             # 
-mv ../lib/libapt-pkg.$PKG.dylib ../lib/libapt-pkg-$PKG.dylib                 # 
+mv libapt-private.$PRIVATE.dylib ../lib/libapt-private-$PRIVATE.dylib # This breaks symlinks but ah well.
+mv libapt-inst.$INST.dylib ../lib/libapt-inst-$INST.dylib             #
+mv libapt-pkg.$PKG.dylib ../lib/libapt-pkg-$PKG.dylib                 #
+
+rm -rf *.dylib
 
 ln -s ../lib/libapt-private-$PRIVATE.dylib ../lib/libapt-private-$PRIVATE_MAJ.dylib
 ln -s ../lib/libapt-private-$PRIVATE_MAJ.dylib ../lib/libapt-private.dylib
@@ -88,3 +89,4 @@ cd ../lib/methods
 
 for i in ./*; do
     install_name_tool -change `otool -L $i | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../libapt-pkg-$PKG.dylib $i
+done
