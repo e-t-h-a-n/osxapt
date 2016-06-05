@@ -82,3 +82,9 @@ install_name_tool -change `otool -L apt-sortpkgs | grep libapt-pkg | sed 's/\t//
 
 ### Now onto methods :(
 
+mv methods/ ../lib/
+
+cd ../lib/methods
+
+for i in ./*; do
+    install_name_tool -change `otool -L $i | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../libapt-pkg-$PKG.dylib $i
