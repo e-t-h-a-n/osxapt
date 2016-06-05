@@ -49,3 +49,36 @@ install_name_tool -change `otool -L apt-cache | grep libapt-private | sed 's/\t/
 install_name_tool -change `otool -L apt-cdrom | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-cdrom
 install_name_tool -change `otool -L apt-cdrom | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-private-$PRIVATE.dylib apt-cdrom
 
+### 4th executable: apt-config. Depends on: libapt-pkg.dylib and libapt-private.dylib
+install_name_tool -change `otool -L apt-config | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-config
+install_name_tool -change `otool -L apt-config | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-private-$PRIVATE.dylib apt-config
+
+### 5th executable: apt-dump-solver. Depends on: libapt-pkg.dylib only
+install_name_tool -change `otool -L apt-dump-solver | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-dump-solver
+
+### 6th executable: apt-extracttemplates. Depends on: libapt-pkg.dylib and libapt-inst.dylib
+install_name_tool -change `otool -L apt-extracttemplates | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-extracttemplates
+install_name_tool -change `otool -L apt-extracttemplates | grep libapt-inst | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-inst-$INST.dylib apt-extracttemplates
+
+### 7th executable: apt-get. Depends on: libapt-pkg.dylib and libapt-private.dylib
+install_name_tool -change `otool -L apt-get | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-get
+install_name_tool -change `otool -L apt-get | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-private-$PRIVATE.dylib apt-get
+
+### 8th executable: apt-helper. Depends on: libapt-pkg.dylib and libapt-private.dylib
+install_name_tool -change `otool -L apt-helper | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-helper
+install_name_tool -change `otool -L apt-helper | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-private-$PRIVATE.dylib apt-helper
+
+### 9th executable: apt-internal-solver. Depends on: libapt-pkg.dylib and libapt-private.dylib
+install_name_tool -change `otool -L apt-internal-solver | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-internal-solver
+install_name_tool -change `otool -L apt-internal-solver | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-private-$PRIVATE.dylib apt-internal-solver
+
+### 10th executable: apt-mark. Depends on: libapt-pkg.dylib and libapt-private.dylib
+install_name_tool -change `otool -L apt-mark | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-mark
+install_name_tool -change `otool -L apt-mark | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-private-$PRIVATE.dylib apt-mark
+
+### 11th executable: apt-sortpkgs. Depends on: libapt-pkg.dylib only
+install_name_tool -change `otool -L apt-sortpkgs | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../lib/libapt-pkg-$PKG.dylib apt-sortpkgs
+
+
+### Now onto methods :(
+
