@@ -1,10 +1,10 @@
-diff -w -r --unified=5 apt-1.0.9.8.3.original/Makefile apt-1.0.9.8.3/Makefile
---- apt-1.0.9.8.3.original/Makefile	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/Makefile	2016-06-04 17:53:18.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/Makefile b/apt-1.0.9.8.3/Makefile
+--- a/apt-1.0.9.8.3/Makefile	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/Makefile	2016-06-05 15:16:42.000000000 +0100
 @@ -9,21 +9,22 @@
  .PHONY: default
  default: startup all
-
+ 
  .PHONY: headers library clean veryclean all binary program doc test update-po
  all headers library clean veryclean binary program doc manpages docbook test update-po startup dirs:
 +	$(MAKE) -C darwin $@
@@ -21,17 +21,17 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/Makefile apt-1.0.9.8.3/Makefile
  	$(MAKE) -C po $@
 -	$(MAKE) -C test $@
 +	#$(MAKE) -C test $@
-
+ 
  all headers library clean veryclean binary program doc manpages docbook test update-po: startup dirs
-
+ 
  dirs: startup
-
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/aptconfiguration.cc apt-1.0.9.8.3/apt-pkg/aptconfiguration.cc
---- apt-1.0.9.8.3.original/apt-pkg/aptconfiguration.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/aptconfiguration.cc	2016-06-04 12:29:03.000000000 +0100
+ 
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/aptconfiguration.cc b/apt-1.0.9.8.3/apt-pkg/aptconfiguration.cc
+--- a/apt-1.0.9.8.3/apt-pkg/aptconfiguration.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/aptconfiguration.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -191,11 +191,11 @@
  	}
-
+ 
  	// get the environment language codes: LC_MESSAGES (and later LANGUAGE)
  	// we extract both, a long and a short code and then we will
  	// check if we actually need both (rare) or if the short is enough
@@ -39,18 +39,18 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/aptconfiguration.cc apt-1.
 +	string const envMsg = string(Locale == 0 ? setlocale(LC_MESSAGES, NULL) : *Locale);
  	size_t const lenShort = (envMsg.find('_') != string::npos) ? envMsg.find('_') : 2;
  	size_t const lenLong = (envMsg.find_first_of(".@") != string::npos) ? envMsg.find_first_of(".@") : (lenShort + 3);
-
+ 
  	string const envLong = envMsg.substr(0,lenLong);
  	string const envShort = envLong.substr(0,lenShort);
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/contrib/cmndline.cc apt-1.0.9.8.3/apt-pkg/contrib/cmndline.cc
---- apt-1.0.9.8.3.original/apt-pkg/contrib/cmndline.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/contrib/cmndline.cc	2016-06-04 14:48:30.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/contrib/cmndline.cc b/apt-1.0.9.8.3/apt-pkg/contrib/cmndline.cc
+--- a/apt-1.0.9.8.3/apt-pkg/contrib/cmndline.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/contrib/cmndline.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -21,10 +21,14 @@
  #include <stddef.h>
  #include <stdlib.h>
  #include <string.h>
  #include <string>
-
+ 
 +#ifdef __APPLE__
 +  #include "darwin/strchrnul.h"
 +#endif // __APPLE__
@@ -58,11 +58,11 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/contrib/cmndline.cc apt-1.
  #include <apti18n.h>
  									/*}}}*/
  using namespace std;
-
+ 
  // CommandLine::CommandLine - Constructor				/*{{{*/
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/contrib/fileutl.cc apt-1.0.9.8.3/apt-pkg/contrib/fileutl.cc
---- apt-1.0.9.8.3.original/apt-pkg/contrib/fileutl.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/contrib/fileutl.cc	2016-06-04 13:22:56.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/contrib/fileutl.cc b/apt-1.0.9.8.3/apt-pkg/contrib/fileutl.cc
+--- a/apt-1.0.9.8.3/apt-pkg/contrib/fileutl.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/contrib/fileutl.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -58,11 +58,18 @@
  	#include <bzlib.h>
  #endif
@@ -78,10 +78,10 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/contrib/fileutl.cc apt-1.0
 +#endif // __APPLE__
 +
  #include <stdint.h>
-
+ 
  #include <apti18n.h>
  									/*}}}*/
-
+ 
 @@ -1883,11 +1890,15 @@
         if (read(iFd, &size, 4) != 4)
         {
@@ -93,20 +93,20 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/contrib/fileutl.cc apt-1.0
 +			 #else
         size = le32toh(size);
 +			 #endif // __APPLE__
-
+ 
         if (lseek(iFd, oldPos, SEEK_SET) < 0)
         {
  	  FileFdErrno("lseek","Unable to seek in gzipped file");
  	  return 0;
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/contrib/sha2_internal.cc apt-1.0.9.8.3/apt-pkg/contrib/sha2_internal.cc
---- apt-1.0.9.8.3.original/apt-pkg/contrib/sha2_internal.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/contrib/sha2_internal.cc	2016-06-04 12:49:29.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/contrib/sha2_internal.cc b/apt-1.0.9.8.3/apt-pkg/contrib/sha2_internal.cc
+--- a/apt-1.0.9.8.3/apt-pkg/contrib/sha2_internal.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/contrib/sha2_internal.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -31,11 +31,16 @@
   *
   * $Id: sha2.c,v 1.1 2001/11/08 00:01:51 adg Exp adg $
   */
  #include <config.h>
-
+ 
 +#ifdef __APPLE__
 +	#include <machine/endian.h>
 +#else
@@ -116,24 +116,24 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/contrib/sha2_internal.cc a
  #include <string.h>	/* memcpy()/memset() or bcopy()/bzero() */
  #include <assert.h>	/* assert() */
  #include "sha2_internal.h"
-
+ 
  /*
 @@ -1076,6 +1081,5 @@
-
+ 
  	SHA384_Init(&context);
  	SHA384_Update(&context, data, len);
  	return SHA384_End(&context, digest);
  }
 -
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/deb/debsrcrecords.cc apt-1.0.9.8.3/apt-pkg/deb/debsrcrecords.cc
---- apt-1.0.9.8.3.original/apt-pkg/deb/debsrcrecords.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/deb/debsrcrecords.cc	2016-06-04 14:02:55.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/deb/debsrcrecords.cc b/apt-1.0.9.8.3/apt-pkg/deb/debsrcrecords.cc
+--- a/apt-1.0.9.8.3/apt-pkg/deb/debsrcrecords.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/deb/debsrcrecords.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -17,10 +17,14 @@
  #include <apt-pkg/strutl.h>
  #include <apt-pkg/aptconfiguration.h>
  #include <apt-pkg/srcrecords.h>
  #include <apt-pkg/tagfile.h>
-
+ 
 +#ifdef __APPLE__
 +  #include "darwin/strchrnul.h"
 +#endif // __APPLE__
@@ -143,15 +143,15 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/deb/debsrcrecords.cc apt-1
  #include <string.h>
  #include <algorithm>
  #include <string>
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/deb/debversion.cc apt-1.0.9.8.3/apt-pkg/deb/debversion.cc
---- apt-1.0.9.8.3.original/apt-pkg/deb/debversion.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/deb/debversion.cc	2016-06-04 14:00:56.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/deb/debversion.cc b/apt-1.0.9.8.3/apt-pkg/deb/debversion.cc
+--- a/apt-1.0.9.8.3/apt-pkg/deb/debversion.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/deb/debversion.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -13,10 +13,14 @@
  #include <config.h>
-
+ 
  #include <apt-pkg/debversion.h>
  #include <apt-pkg/pkgcache.h>
-
+ 
 +#ifdef __APPLE__
 +  #include "darwin/memrchr.h"
 +#endif // __APPLE__
@@ -161,12 +161,12 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/deb/debversion.cc apt-1.0.
  #include <stdlib.h>
  #include <ctype.h>
  									/*}}}*/
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/deb/dpkgpm.cc apt-1.0.9.8.3/apt-pkg/deb/dpkgpm.cc
---- apt-1.0.9.8.3.original/apt-pkg/deb/dpkgpm.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/deb/dpkgpm.cc	2016-06-04 14:01:09.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/deb/dpkgpm.cc b/apt-1.0.9.8.3/apt-pkg/deb/dpkgpm.cc
+--- a/apt-1.0.9.8.3/apt-pkg/deb/dpkgpm.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/deb/dpkgpm.cc	2016-06-05 15:19:13.000000000 +0100
 @@ -25,11 +25,10 @@
  #include <apt-pkg/pkgcache.h>
-
+ 
  #include <errno.h>
  #include <fcntl.h>
  #include <grp.h>
@@ -181,7 +181,7 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/deb/dpkgpm.cc apt-1.0.9.8.
  #include <string>
  #include <utility>
  #include <vector>
-
+ 
 +#ifdef __APPLE__ // OS X stores some functions from <pty.h> under <util.h>.
 +  #include <util.h>
 +  #include <crt_externs.h> // And while we're sorting out <pty.h> and <util.h>, include <crt_externs.h> for _NSGetEnviron().
@@ -192,9 +192,9 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/deb/dpkgpm.cc apt-1.0.9.8.
 +
  #include <apti18n.h>
  									/*}}}*/
-
+ 
  using namespace std;
-
+ 
  APT_PURE static unsigned int
  EnvironmentSize()
  {
@@ -204,79 +204,70 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/deb/dpkgpm.cc apt-1.0.9.8.
 +  #else
    char **envp = environ;
 +  #endif // __APPLE__
-
+ 
    while (*envp != NULL)
      size += strlen (*envp++) + 1;
-
+ 
    return size;
 @@ -421,11 +432,15 @@
     Configuration::Item const *Opts = _config->Tree(Cnf);
     if (Opts == 0 || Opts->Child == 0)
        return true;
     Opts = Opts->Child;
-
+ 
+-   sighandler_t old_sigpipe = signal(SIGPIPE, SIG_IGN);
 +   #ifdef __APPLE__
-+    sig_t old_sigpipe = signal(SIGPIPE, SIG_IGN);
++     sig_t old_sigpipe = signal(SIGPIPE, SIG_IGN);
 +   #else
-    sighandler_t old_sigpipe = signal(SIGPIPE, SIG_IGN);
++     sighandler_t old_sigpipe = signal(SIGPIPE, SIG_IGN);
 +   #endif // __APPLE__
-
+    
     unsigned int Count = 1;
     for (; Opts != 0; Opts = Opts->Next, Count++)
     {
        if (Opts->Value.empty() == true)
-@@ -1507,20 +1522,29 @@
-
-       /* Mask off sig int/quit. We do this because dpkg also does when
+@@ -1507,12 +1522,17 @@
+ 
+       /* Mask off sig int/quit. We do this because dpkg also does when 
           it forks scripts. What happens is that when you hit ctrl-c it sends
- 	 it to all processes in the group. Since dpkg ignores the signal
+ 	 it to all processes in the group. Since dpkg ignores the signal 
  	 it doesn't die but we do! So we must also ignore it */
+-      sighandler_t old_SIGQUIT = signal(SIGQUIT,SIG_IGN);
+-      sighandler_t old_SIGINT = signal(SIGINT,SigINT);
 +      #ifdef __APPLE__
 +        sig_t old_SIGQUIT = signal(SIGQUIT,SIG_IGN);
 +        sig_t old_SIGINT = signal(SIGINT,SigINT);
 +      #else
-       sighandler_t old_SIGQUIT = signal(SIGQUIT,SIG_IGN);
-       sighandler_t old_SIGINT = signal(SIGINT,SigINT);
++        sighandler_t old_SIGQUIT = signal(SIGQUIT,SIG_IGN);
++        sighandler_t old_SIGINT = signal(SIGINT,SigINT);
 +      #endif // __APPLE__
-
+       
        // Check here for any SIGINT
-       if (pkgPackageManager::SigINTStop && (Op == Item::Remove || Op == Item::Purge || Op == Item::Install))
+       if (pkgPackageManager::SigINTStop && (Op == Item::Remove || Op == Item::Purge || Op == Item::Install)) 
           break;
-
-
-       // ignore SIGHUP as well (debian #463030)
-+      #ifdef __APPLE__
-+        sig_t old_SIGHUP = signal(SIGHUP,SIG_IGN);
-+      #else
-       sighandler_t old_SIGHUP = signal(SIGHUP,SIG_IGN);
-+      #endif // __APPLE__
-
-       // now run dpkg
-       d->progress->StartDpkg();
-       std::set<int> KeepFDs;
-       KeepFDs.insert(fd[1]);
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/install-progress.h apt-1.0.9.8.3/apt-pkg/install-progress.h
---- apt-1.0.9.8.3.original/apt-pkg/install-progress.h	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/install-progress.h	2016-06-04 12:47:57.000000000 +0100
+       
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/install-progress.h b/apt-1.0.9.8.3/apt-pkg/install-progress.h
+--- a/apt-1.0.9.8.3/apt-pkg/install-progress.h	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/install-progress.h	2016-06-05 15:16:42.000000000 +0100
 @@ -132,11 +132,15 @@
         int rows;
         int columns;
      } TermSize;
      TermSize GetTerminalSize();
-
+ 
 +    #ifdef __APPLE__
 +    sig_t old_SIGWINCH;
 +    #else
      sighandler_t old_SIGWINCH;
 +    #endif // __APPLE__
      int child_pty;
-
+ 
   public:
      PackageManagerFancy();
      ~PackageManagerFancy();
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/makefile apt-1.0.9.8.3/apt-pkg/makefile
---- apt-1.0.9.8.3.original/apt-pkg/makefile	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/makefile	2016-06-04 17:34:10.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/makefile b/apt-1.0.9.8.3/apt-pkg/makefile
+--- a/apt-1.0.9.8.3/apt-pkg/makefile	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/makefile	2016-06-05 15:16:42.000000000 +0100
 @@ -24,10 +24,17 @@
  endif
  ifeq ($(HAVE_LZMA),yes)
@@ -286,21 +277,21 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/makefile apt-1.0.9.8.3/apt
 +#ifeq ($(shell uname), Darwin)
 +#SLIBS+= -L$(BASE)/darwin -ldarwinmissing.a
 +#endif
-
+ 
  SOURCE = $(wildcard *.cc */*.cc)
  HEADERS = $(addprefix apt-pkg/,$(notdir $(wildcard *.h */*.h)))
-
+ 
 +ifeq ($(shell uname), Darwin)
 +SOURCE+= $(BASE)/darwin/strchrnul.cc $(BASE)/darwin/memrchr.cc
 +endif
 +
  include $(LIBRARY_H)
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/srcrecords.cc apt-1.0.9.8.3/apt-pkg/srcrecords.cc
---- apt-1.0.9.8.3.original/apt-pkg/srcrecords.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-pkg/srcrecords.cc	2016-06-04 12:39:17.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-pkg/srcrecords.cc b/apt-1.0.9.8.3/apt-pkg/srcrecords.cc
+--- a/apt-1.0.9.8.3/apt-pkg/srcrecords.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-pkg/srcrecords.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -29,11 +29,11 @@
  									/*}}}*/
-
+ 
  // SrcRecords::pkgSrcRecords - Constructor				/*{{{*/
  // ---------------------------------------------------------------------
  /* Open all the source index files */
@@ -311,12 +302,12 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-pkg/srcrecords.cc apt-1.0.9.8.
     {
        std::vector<pkgIndexFile *> *Indexes = (*I)->GetIndexFiles();
        for (std::vector<pkgIndexFile *>::const_iterator J = Indexes->begin();
-diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-private/private-install.cc apt-1.0.9.8.3/apt-private/private-install.cc
---- apt-1.0.9.8.3.original/apt-private/private-install.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/apt-private/private-install.cc	2016-06-04 16:32:23.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/apt-private/private-install.cc b/apt-1.0.9.8.3/apt-private/private-install.cc
+--- a/apt-1.0.9.8.3/apt-private/private-install.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/apt-private/private-install.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -22,11 +22,16 @@
  #include <apt-pkg/upgrade.h>
-
+ 
  #include <errno.h>
  #include <stdlib.h>
  #include <string.h>
@@ -331,30 +322,25 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/apt-private/private-install.cc apt
  #include <iostream>
  #include <set>
  #include <vector>
-
-
-
-
-
-diff -w -r --unified=5 apt-1.0.9.8.3.original/buildlib/defaults.mak apt-1.0.9.8.3/buildlib/defaults.mak
---- apt-1.0.9.8.3.original/buildlib/defaults.mak	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/buildlib/defaults.mak	2016-06-04 15:18:48.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/buildlib/defaults.mak b/apt-1.0.9.8.3/buildlib/defaults.mak
+--- a/apt-1.0.9.8.3/buildlib/defaults.mak	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/buildlib/defaults.mak	2016-06-05 15:22:19.000000000 +0100
 @@ -106,11 +106,11 @@
  # will be published to.
  # This should be declared before including this file
  HEADER_TARGETDIRS+=
-
+ 
  # Options
 -CPPFLAGS+= -I$(INCLUDE)
-+CPPFLAGS+= -I$(INCLUDE) -I$(SRCDIR) -I$(SRCDIR)/include
++CPPFLAGS+= -I$(INCLUDE) -I$(SRCDIR)/include -I$(SRCDIR)
  LDFLAGS+= -L$(LIB)
-
+ 
  # Directors to create
- MKDIRS := $(BIN)
-
-diff -w -r --unified=5 apt-1.0.9.8.3.original/buildlib/environment.mak.in apt-1.0.9.8.3/buildlib/environment.mak.in
---- apt-1.0.9.8.3.original/buildlib/environment.mak.in	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/buildlib/environment.mak.in	2016-06-04 15:09:49.000000000 +0100
+ MKDIRS := $(BIN) 
+ 
+diff -rU 5 a/apt-1.0.9.8.3/buildlib/environment.mak.in b/apt-1.0.9.8.3/buildlib/environment.mak.in
+--- a/apt-1.0.9.8.3/buildlib/environment.mak.in	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/buildlib/environment.mak.in	2016-06-05 15:22:57.000000000 +0100
 @@ -8,12 +8,14 @@
  # C++ compiler options
  CC = @CC@
@@ -370,7 +356,7 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/buildlib/environment.mak.in apt-1.
  # a bit too pedantic to be run by default
  #CXXFLAGS+= -Wpedantic -Wno-long-long -Wno-vla -Wno-variadic-macros
  NUM_PROCS = @NUM_PROCS@
-
+ 
  # Linker stuff
 @@ -73,5 +75,7 @@
     LFLAGS_SO=
@@ -380,9 +366,9 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/buildlib/environment.mak.in apt-1.
  endif
 +
 +SRCDIR = @abs_srcdir@
-diff -w -r --unified=5 apt-1.0.9.8.3.original/cmdline/apt-get.cc apt-1.0.9.8.3/cmdline/apt-get.cc
---- apt-1.0.9.8.3.original/cmdline/apt-get.cc	2016-03-12 13:14:29.000000000 +0000
-+++ apt-1.0.9.8.3/cmdline/apt-get.cc	2016-06-04 16:50:09.000000000 +0100
+diff -rU 5 a/apt-1.0.9.8.3/cmdline/apt-get.cc b/apt-1.0.9.8.3/cmdline/apt-get.cc
+--- a/apt-1.0.9.8.3/cmdline/apt-get.cc	2016-03-12 13:14:29.000000000 +0000
++++ b/apt-1.0.9.8.3/cmdline/apt-get.cc	2016-06-05 15:16:42.000000000 +0100
 @@ -76,11 +76,16 @@
  #include <stdio.h>
  #include <stdlib.h>
@@ -400,3 +386,4 @@ diff -w -r --unified=5 apt-1.0.9.8.3.original/cmdline/apt-get.cc apt-1.0.9.8.3/c
  #include <unistd.h>
  #include <algorithm>
  #include <fstream>
+Only in b/apt-1.0.9.8.3: darwin
