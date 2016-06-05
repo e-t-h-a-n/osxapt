@@ -3,7 +3,7 @@
 
 set -e
 
-if [ ! `dirname` -eq bin ]; then
+if [ ! `basename $PWD` -eq bin ]; then
     cd bin
 fi
 
