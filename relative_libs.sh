@@ -112,15 +112,15 @@ for i in ./*.dylib; do
   if [ ! -h $i ]; then
     printf "\033[32;1mPatching "`basename $i`"\033[0m\n"
     if [[ `otool -L $i | grep libapt- | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` == *"libapt-pkg"* ]]; then
-      install_name_tool -change `otool -L $i | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` libapt-pkg-$PKG.dylib $i
+      install_name_tool -change `otool -L $i | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` @executable_path/../lib/libapt-pkg-$PKG.dylib $i
       printf "\033[32;1m"`basename $i`" patched for libapt-pkg\033[0m\n"
     fi
     if [[ `otool -L $i | grep libapt- | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` == *"libapt-private"* ]]; then
-      install_name_tool -change `otool -L $i | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` libapt-private-$PRIVATE.dylib $i
+      install_name_tool -change `otool -L $i | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` @executable_path/../lib/libapt-private-$PRIVATE.dylib $i
       printf "\033[32;1m"`basename $i`" patched for libapt-private\033[0m\n"
     fi
     if [[ `otool -L $i | grep libapt- | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` == *"libapt-inst"* ]]; then
-      install_name_tool -change `otool -L $i | grep libapt-inst | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` libapt-inst-$INST.dylib $i
+      install_name_tool -change `otool -L $i | grep libapt-inst | sed 's/\t//g;s/\.dylib.*)/.dylib/g;s/.\/.*.dylib://g'` @executable_path/../lib/libapt-inst-$INST.dylib $i
       printf "\033[32;1m"`basename $i`" patched for libapt-inst\033[0m\n"
     fi
   fi
