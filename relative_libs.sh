@@ -90,3 +90,21 @@ cd ../lib/methods
 for i in ./*; do
     install_name_tool -change `otool -L $i | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/../libapt-pkg-$PKG.dylib $i
 done
+
+### Now libraries :(((((( CRRYYYYY
+
+cd ../
+
+for i in ./*.dylib; do
+  if [ ! -h $i ]; then
+    if [[ `echo \`expr \\\`otool -L $i | grep libapt- | sed 's/\t//g;s/\.dylib.*)/.dylib/g' | wc -l\\\` - 1\`` == *"libapt-pkg"* ]]; then
+      install_name_tool -change `otool -L $i | grep libapt-pkg | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/libapt-pkg-$PKG.dylib $i
+    fi
+    if [[ `echo \`expr \\\`otool -L $i | grep libapt- | sed 's/\t//g;s/\.dylib.*)/.dylib/g' | wc -l\\\` - 1\`` == *"libapt-private"* ]]; then
+      install_name_tool -change `otool -L $i | grep libapt-private | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/libapt-private-$PRIVATE.dylib $i
+    fi
+    if [[ `echo \`expr \\\`otool -L $i | grep libapt- | sed 's/\t//g;s/\.dylib.*)/.dylib/g' | wc -l\\\` - 1\`` == *"libapt-inst"* ]]; then
+      install_name_tool -change `otool -L $i | grep libapt-inst | sed 's/\t//g;s/\.dylib.*)/.dylib/g'` @executable_path/libapt-inst-$INST.dylib $i
+    fi
+  fi
+done
